@@ -1,232 +1,142 @@
-<<<<<<< HEAD
-/* =========================
-   RESET GLOBAL
-========================= */
+/* Reset global */
 *,
 *::before,
 *::after {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html, body {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    font-family: Arial, sans-serif;
-
-    background: url("image/philipp-hubert-dVVjhUcdb30-unsplash.jpg")
-                no-repeat center center fixed;
-    background-size: cover;
-}
-
-/* =========================
-   HEADER
-========================= */
-header {
-    text-align: center;
-    padding: 16px;
-}
-
-header .logo {
-    max-width: 130px;
-}
-
-/* =========================
-   DASHBOARD CARD (CLÉ)
-========================= */
-.dashboard-bg {
-    width: 100%;
-    max-width: 920px;
-    margin: 0 auto 40px auto;
-
-    background: rgba(0,0,50,0.65);
-    border-radius: 20px;
-
-    padding: 28px 20px;
-    text-align: center;
-}
-
-/* =========================
-   TITRE
-========================= */
-.dashboard-title {
-    color: #fff;
-    font-size: 30px;
-    margin: 26px 0;
-}
-
-/* =========================
-   BOUTONS / FORM
-========================= */
-.buttons-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 18px;
-}
-
-.type-button {
-    background: rgba(0,123,255,0.95);
-    border-radius: 14px;
-    padding: 16px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.type-button select,
-.type-button button {
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    font-size: 15px;
-}
-
-.type-button button {
-    background: #0056b3;
-    color: #fff;
-    cursor: pointer;
-}
-
-/* =========================
-   BOUTON AJOUT
-========================= */
-.btn-custom {
-    display: inline-block;
-    margin-bottom: 18px;
-    padding: 14px 24px;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    text-decoration: none;
-}
-
-.btn-green {
-    background: #28a745;
-}
-
-/* =========================
-   TABLETTE
-========================= */
-@media (max-width: 900px) {
-    .dashboard-bg {
-        padding: 24px 16px;
-    }
-
-    .dashboard-title {
-        font-size: 26px;
-    }
-}
-
-/* =========================
-   MOBILE
-========================= */
-@media (max-width: 480px) {
-    header .logo {
-        max-width: 105px;
-    }
-
-    .dashboard-bg {
-        padding: 20px 14px;
-        border-radius: 16px;
-    }
-
-    .dashboard-title {
-        font-size: 22px;
-    }
-}
-=======
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
     background: url('image/philipp-hubert-dVVjhUcdb30-unsplash.jpg') no-repeat center center fixed;
     background-size: cover;
+    min-height: 100vh;
+    color: #333;
 }
 
+/* Overlay semi-transparent derrière le dashboard pour lisibilité */
+.dashboard-bg {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 40px 30px;
+    background: rgba(255, 255, 255, 0.15); /* très transparent pour voir le bg */
+    backdrop-filter: blur(12px); /* flou derrière pour lisibilité */
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Logo header */
 header {
     text-align: center;
     padding: 20px;
 }
 
 header .logo {
-    height: 80px;
+    height: 70px;
+    transition: transform 0.3s;
 }
 
-.dashboard-bg {
-    text-align: center;
-    padding: 50px 20px;
-    background-color: rgba(0,0,50,0.6);
-    min-height: calc(100vh - 120px);
+header .logo:hover {
+    transform: scale(1.05);
 }
 
+/* Dashboard title */
 .dashboard-title {
-    color: #fff;
     font-size: 36px;
+    font-weight: 500;
     margin-bottom: 40px;
+    color: #fff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4); /* lisibilité sur le bg */
 }
 
+/* Container des types */
 .buttons-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px;
+    justify-items: center;
 }
 
+/* Carte type de cas */
 .type-button {
-    display: inline-block;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    padding: 20px 30px;
-    border-radius: 8px;
-    font-size: 18px;
-    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 25px 20px;
+    background: rgba(66, 133, 244, 0.85); /* bleu semi-transparent pour voir bg */
+    color: #fff;
+    font-weight: 500;
+    border-radius: 12px;
+    min-width: 220px;
+    width: 100%;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
 }
 
 .type-button:hover {
-    background-color: #0056b3;
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+    background: rgba(66, 133, 244, 1); /* devient opaque au hover */
 }
-/* ========= Responsive ========= */
-@media (max-width: 900px) {
+
+/* Select */
+.type-button select {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Bouton submit */
+.type-button button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #4285f4;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+.type-button button:hover {
+    background-color: #4285f4;
+    color: #fff;
+}
+
+/* Bouton principal */
+.btn-custom {
+    display: inline-block;
+    padding: 14px 28px;
+    margin-bottom: 30px;
+    background: #34a853;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .dashboard-bg {
+        padding: 30px 20px;
+    }
     .dashboard-title {
-        font-size: 26px;
+        font-size: 28px;
     }
-
-    .type-button {
-        width: 100%;
-        text-align: center;
-        font-size: 18px;
-        padding: 15px;
-    }
-
     .buttons-container {
-        flex-direction: column;
-        align-items: center;
+        grid-template-columns: 1fr;
         gap: 15px;
     }
 }
-.btn-custom {
-    display: inline-block;
-    padding: 12px 22px;
-    color: white !important;
-    cursor:pointer;
-    text-decoration: none;
-    border: 0;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: bold;
-}
-.btn-green {
-    background-color: #28a745 !important;}
-    .btn-custom:hover {
-        opacity: 0.9;}
-@media (max-width: 640px) { 
-    .btn { padding:12px 16px; font-size: 15px; display: block; width: 100%; text-align: center; margin-bottom: 10px;
-    }
-
-}
-
->>>>>>> cae26eb8cd1aa78f464dbed20270946d17518866
