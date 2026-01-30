@@ -1,85 +1,138 @@
-body, html {
+/* =========================
+   RESET GLOBAL
+========================= */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
     font-family: Arial, sans-serif;
-    background: url('image/philipp-hubert-dVVjhUcdb30-unsplash.jpg') no-repeat center center fixed;
+
+    background: url("image/philipp-hubert-dVVjhUcdb30-unsplash.jpg")
+                no-repeat center center fixed;
     background-size: cover;
 }
 
+/* =========================
+   HEADER
+========================= */
 header {
     text-align: center;
-    padding: 20px;
+    padding: 16px;
 }
 
 header .logo {
-    height: 80px;
+    max-width: 130px;
 }
 
+/* =========================
+   DASHBOARD CARD (CLÉ)
+========================= */
 .dashboard-bg {
+    width: 100%;
+    max-width: 920px;
+    margin: 0 auto 40px auto;
+
+    background: rgba(0,0,50,0.65);
+    border-radius: 20px;
+
+    padding: 28px 20px;
     text-align: center;
-    padding: 50px 20px;
-    background-color: rgba(0,0,50,0.6);
-    min-height: calc(100vh - 120px);
 }
 
+/* =========================
+   TITRE
+========================= */
 .dashboard-title {
     color: #fff;
-    font-size: 36px;
-    margin-bottom: 40px;
+    font-size: 30px;
+    margin: 26px 0;
 }
 
+/* =========================
+   BOUTONS / FORM
+========================= */
 .buttons-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 18px;
 }
 
 .type-button {
-    display: inline-block;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    padding: 20px 30px;
-    border-radius: 8px;
-    font-size: 18px;
-    transition: 0.3s;
+    background: rgba(0,123,255,0.95);
+    border-radius: 14px;
+    padding: 16px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.type-button:hover {
-    background-color: #0056b3;
+.type-button select,
+.type-button button {
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
 }
-/* ========= Responsive ========= */
+
+.type-button button {
+    background: #0056b3;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* =========================
+   BOUTON AJOUT
+========================= */
+.btn-custom {
+    display: inline-block;
+    margin-bottom: 18px;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn-green {
+    background: #28a745;
+}
+
+/* =========================
+   TABLETTE
+========================= */
 @media (max-width: 900px) {
+    .dashboard-bg {
+        padding: 24px 16px;
+    }
+
     .dashboard-title {
         font-size: 26px;
     }
+}
 
-    .type-button {
-        width: 100%;
-        text-align: center;
-        font-size: 18px;
-        padding: 15px;
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 480px) {
+    header .logo {
+        max-width: 105px;
     }
 
-    .buttons-container {
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
+    .dashboard-bg {
+        padding: 20px 14px;
+        border-radius: 16px;
+    }
+
+    .dashboard-title {
+        font-size: 22px;
     }
 }
-.btn-custom {
-    display: inline-block;
-    padding: 12px 22px;
-    color: white !important;
-    cursor:pointer;
-    text-decoration: none;
-    border: 0;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: bold;
-}
-.btn-green {
-    background-color: #28a745 !important;
-}
-

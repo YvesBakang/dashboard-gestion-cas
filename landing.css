@@ -1,88 +1,163 @@
-/* -- BACKGROUND PAGE — */
-.landing-wrapper {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 20px;
-    }
+/* =========================
+   RESET MODERNE
+========================= */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
-/* — LOGIN CARD — */
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* =========================
+   WRAPPER
+========================= */
+.landing-wrapper {
+    width: 100vw;
+    min-height: 100vh;
+
+    background: url("image/philipp-hubert-dVVjhUcdb30-unsplash.jpg")
+                no-repeat center center;
+    background-size: cover;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 16px;
+}
+
+/* Effet fixed UNIQUEMENT desktop */
+@media (min-width: 768px) {
+    .landing-wrapper {
+        background-attachment: fixed;
+    }
+}
+
+/* =========================
+   CARD
+========================= */
 .login-card {
     width: 100%;
     max-width: 420px;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(8px);
-    padding: 40px 35px;
-    border-radius: 14px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 18px;
+    padding: 28px 22px;
+
     text-align: center;
-    }
-    /* -- LOGO — */
-.login-logo {
-    width: 120px;
-    margin-bottom: 15px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
-/* — TITRES — */
+/* =========================
+   LOGO & TEXT
+========================= */
+.login-logo {
+    width: 140px;
+    height: auto;
+    margin-bottom: 12px;
+}
+
 .login-title {
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 5px;
-    color: #0A3D62;
+    font-size: 1.3rem;
+    margin: 10px 0 4px;
 }
 
 .login-subtext {
-    font-size: 16px;
-    color: #444;
-    margin-bottom: 25px;
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 18px;
 }
-.form-group { text-align: left; margin-bottom: 18px; }
-.form-group label { font-weight: 600; font-size: 16px; }
+
+/* =========================
+   FORM
+========================= */
+.form-group {
+    text-align: left;
+    margin-bottom: 14px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+}
+
 .form-group input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid blue;
-    border-radius: 8px;
-    font-size: 15px;
-}
-.form-group input:focus { border-color: #0A3D62; }
+    padding: 11px 12px;
+    font-size: 0.95rem;
 
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: #2a7fff;
+}
+
+/* =========================
+   BUTTON
+========================= */
 .login-btn {
     width: 100%;
-    background: #0A3D62;
-    color: white;
+    margin-top: 10px;
     padding: 12px;
+
+    background: linear-gradient(135deg, #2a7fff, #1a5fd6);
+    color: #fff;
+
     border: none;
-    border-radius: 8px;
-    font-size: 17px;
-    font-weight: bold;
+    border-radius: 12px;
+
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
 }
-.login-btn:hover { background: #082f4c; }
 
-.error-msg {
-    color: red;
-    margin-bottom: 15px;
-    font-weight: bold;
-    text-align: center;
+.login-btn:hover {
+    opacity: 0.95;
 }
-/* ========= Responsive ========= */
-@media (max-width: 768px) {
+
+/* =========================
+   ERROR
+========================= */
+.error-msg {
+    background: #ffe0e0;
+    color: #b00020;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+}
+
+/* =========================
+   MOBILE OPTIM
+========================= */
+/* =========================
+   MOBILE OPTIMISATION (APP-LIKE)
+========================= */
+@media (max-width: 480px) {
+
+    .landing-wrapper {
+        min-height: auto;          /* enlève le plein écran forcé */
+        padding: 10px 8px;         /* réduit l’espace autour */
+        align-items: flex-start;   /* stop le centrage vertical excessif */
+    }
+
     .login-card {
-        padding: 25px 20px;
-        max-width: 95%;
+        margin-top: 20px;          /* petit espace propre en haut */
+        width: 100%;
+        max-width: 100%;
+        border-radius: 14px;
     }
 
-    .login-title {
-        font-size: 22px;
-    }
-
-    .login-logo {
-        width: 90px;
-    }
-
-    input {
-        font-size: 14px;
-    }
 }

@@ -1,96 +1,133 @@
-body, html {
+/* =========================
+   RESET
+========================= */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
     font-family: Arial, sans-serif;
     background: url('image/philipp-hubert-dVVjhUcdb30-unsplash.jpg') no-repeat center center fixed;
     background-size: cover;
     color: #fff;
 }
 
+/* =========================
+   HEADER
+========================= */
 header {
     text-align: center;
-    padding: 20px;
+    padding: 18px 12px;
 }
 
 header .logo {
-    height: 80px;
+    max-width: 120px;
 }
 
 header h1 {
-    margin-top: 10px;
-    font-size: 28px;
+    margin: 14px 0;
+    font-size: 26px;
 }
 
+/* =========================
+   CONTAINER
+========================= */
 .details-table-container {
-    width: 90%;
-    margin: 30px auto;
-    background-color: rgba(0,0,50,0.6);
-    padding: 20px;
-    border-radius: 10px;
-    overflow-x: auto;
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto 40px auto;
+    background-color: rgba(0,0,50,0.65);
+    padding: 22px;
+    border-radius: 20px;
 }
 
+/* =========================
+   SEARCH
+========================= */
+#searchCentre {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 16px;
+}
+
+/* =========================
+   TABLE
+========================= */
 table {
     width: 100%;
     border-collapse: collapse;
 }
 
-table th, table td {
+th, td {
     padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #fff;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
 }
 
-table th {
-    background-color: rgba(0,123,255,0.8);
+th {
+    background-color: rgba(0,123,255,0.85);
 }
 
-table td a {
-    color: #fff;
-    text-decoration: underline;
+tr:hover {
+    background-color: rgba(255,255,255,0.08);
 }
 
-table tr:hover {
-    background-color: rgba(255,255,255,0.1);
+/* =========================
+   BOUTONS
+========================= */
+.btn-custom {
+    display: inline-block;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 15px;
+    color: #fff !important;
+    text-decoration: none;
 }
-/* ========= Responsive ========= */
+
+.btn-green {
+    background-color: #28a745;
+}
+
+/* =========================
+   TABLETTE
+========================= */
 @media (max-width: 768px) {
-
     header h1 {
         font-size: 22px;
     }
 
     .details-table-container {
-        padding: 15px;
+        padding: 18px;
     }
 
     table th, table td {
-        padding: 8px;
         font-size: 14px;
+        padding: 10px;
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 480px) {
+    header .logo {
+        max-width: 100px;
     }
 
-    table {
-        display: block;
-        overflow-x: auto;
-        width: 100%;
+    header h1 {
+        font-size: 20px;
     }
-}
-.btn-custom {
-    display: inline-block;
-    padding: 12px 22px;
-    color: white !important;
-    cursor:pointer;
-    text-decoration: none;
-    border: 0;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: bold;
-}
-.btn-green {
-    background-color: #28a745 !important;}
-    .btn-custom:hover {
-        opacity: 0.9;}
-@media (max-width: 640px) { 
-    .btn-custom { padding:12px 16px; font-size: 15px; display: block; width: 100%; text-align: center; margin-bottom: 10px;
+
+    .details-table-container {
+        padding: 16px;
+        border-radius: 16px;
     }
 }

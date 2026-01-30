@@ -44,7 +44,7 @@ function h($s) {
 
     <!-- Barre de recherche -->
     <div style="margin-bottom: 15px;">
-        <input type="text" id="searchCentre" class="form-control" placeholder="🔍 Rechercher un centre par nom">
+        <input type="text" id="searchCentre" class="form-control" placeholder="🔍 Rechercher un centre par son nom">
     </div>
 
     <table id="centresTable">

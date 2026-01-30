@@ -1,39 +1,40 @@
-/* =========================  
-   BODY
+/* =========================
+   RESET
 ========================= */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-
-    /* Image de fond */
-    background: url("image/milad-fakurian-saOPkvma85M-unsplash.jpg")
-                no-repeat center center fixed;
+    background: url("image/milad-fakurian-saOPkvma85M-unsplash.jpg") no-repeat center center fixed;
     background-size: cover;
-
     color: #ffffff;
+    overflow-x: hidden;
 }
 
 /* =========================
-   CONTENEUR FORMULAIRE
+   CONTENEUR
 ========================= */
 .form-container {
+    width: 100%;
     max-width: 750px;
-    margin: 60px auto;
-    position: relative;
-    padding: 0;
+    margin: 40px auto;
+    padding: 0 14px;
 }
 
 /* =========================
-   LOGO (TRANSPARENT)
+   LOGO
 ========================= */
 .logo {
     display: block;
     max-width: 160px;
     margin: 25px auto;
     background: transparent;
-    border: none;
-    box-shadow: none;
     filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6));
 }
 
@@ -41,17 +42,11 @@ body {
    FORMULAIRE
 ========================= */
 form {
-    background: rgba(0, 0, 50, 0.75); /* fond plus opaque pour lisibilité */
+    background: rgba(0, 0, 50, 0.75);
     border-radius: 20px;
     padding: 35px 40px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(8px); /* effet flou derrière */
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    transition: all 0.3s ease;
-}
-
-form:hover {
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
 }
 
 /* =========================
@@ -62,86 +57,58 @@ form:hover {
     font-size: 30px;
     font-weight: 700;
     margin-bottom: 35px;
-    color: #ffffff;
-    letter-spacing: 0.5px;
 }
 
 /* =========================
-   LABELS
+   INPUTS
 ========================= */
 label {
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     display: block;
-    color: #ffffff;
-    font-size: 15px;
 }
 
-/* =========================
-   INPUTS / SELECT / TEXTAREA
-========================= */
 input,
 select,
 textarea {
     width: 100%;
-    padding: 12px 14px;
+    padding: 12px;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.35);
     color: #ffffff;
     font-size: 15px;
-    box-sizing: border-box;
     margin-bottom: 15px;
-    transition: all 0.25s ease;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-    border-color: #3b82f6;
-    background: rgba(255, 255, 255, 0.18);
-    outline: none;
-}
-
-/* Placeholder */
-input::placeholder,
-textarea::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-/* Options select */
-option {
-    background: #1a1a2e;
-    color: #ffffff;
 }
 
 /* =========================
-   BOUTONS
+   BOUTON
 ========================= */
 button {
+    width: 100%;
     background: #1e3a8a;
     border: none;
     color: #ffffff;
     font-weight: 600;
-    padding: 12px 25px;
-    border-radius: 10px;
+    padding: 14px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-button:hover {
-    background: #3b82f6;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
 }
 
 /* =========================
-   ALERTES (SUCCESS / ERROR)
+   RESPONSIVE MOBILE
 ========================= */
-.alert {
-    border-radius: 12px;
-    padding: 15px 20px;
-    margin-bottom: 20px;
+@media (max-width: 480px) {
+
+    .form-title {
+        font-size: 22px;
+    }
+
+    form {
+        padding: 25px 18px;
+    }
+
+    .logo {
+        max-width: 120px;
+    }
 }
