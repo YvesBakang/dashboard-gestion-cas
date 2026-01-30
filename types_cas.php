@@ -47,4 +47,3 @@ $types_query = $conn->query("SELECT DISTINCT types_cas FROM tables_cas ORDER BY 
 </body>
 </html>
 
-

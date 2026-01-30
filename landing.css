@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* =========================
    RESET MODERNE
 ========================= */
@@ -161,3 +162,94 @@ html, body {
     }
 
 }
+=======
+/* -- BACKGROUND PAGE — */
+.landing-wrapper {
+    background: url("image/philipp-hubert-dVVjhUcdb30-unsplash.jpg") no-repeat center center/cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    }
+
+/* — LOGIN CARD — */
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    padding: 40px 35px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    text-align: center;
+    }
+    /* -- LOGO — */
+.login-logo {
+    width: 120px;
+    margin-bottom: 15px;
+}
+
+/* — TITRES — */
+.login-title {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 5px;
+    color: #0A3D62;
+}
+
+.login-subtext {
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 25px;
+}
+.form-group { text-align: left; margin-bottom: 18px; }
+.form-group label { font-weight: 600; font-size: 16px; }
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid blue;
+    border-radius: 8px;
+    font-size: 15px;
+}
+.form-group input:focus { border-color: #0A3D62; }
+
+.login-btn {
+    width: 100%;
+    background: #0A3D62;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.login-btn:hover { background: #082f4c; }
+
+.error-msg {
+    color: red;
+    margin-bottom: 15px;
+    font-weight: bold;
+    text-align: center;
+}
+/* ========= Responsive ========= */
+@media (max-width: 768px) {
+    .login-card {
+        padding: 25px 20px;
+        max-width: 95%;
+    }
+
+    .login-title {
+        font-size: 22px;
+    }
+
+    .login-logo {
+        width: 90px;
+    }
+
+    input {
+        font-size: 14px;
+    }
+}
+>>>>>>> cae26eb8cd1aa78f464dbed20270946d17518866
