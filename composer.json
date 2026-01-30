@@ -1,0 +1,15 @@
+{
+    "name": "mon_site/site",
+    "description": "Projet PhpSpreadsheet",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "MonNom"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "phpoffice/phpspreadsheet": "^4.2"
+    }
+}
