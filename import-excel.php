@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 require_once 'config.php';
 require_once __DIR__ . '/vendor/autoload.php';
@@ -6,252 +5,115 @@ require_once __DIR__ . '/vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
-session_start(); // nécessaire pour envoyer le rapport d'import
+session_start();
+
+function cleanDate($valeur) {
+    if (empty($valeur) || $valeur === 'Decembre 2023') return null;
+    if (strpos($valeur, ',') !== false) {
+        $parts = explode(',', $valeur);
+        $valeur = trim($parts[0]);
+    }
+    if (is_numeric($valeur)) {
+        return Date::excelToDateTimeObject($valeur)->format('Y-m-d');
+    }
+    $valeurNettoyee = str_replace('/', '-', $valeur);
+    $timestamp = strtotime($valeurNettoyee);
+    return $timestamp ? date('Y-m-d', $timestamp) : null;
+}
 
 if (!isset($_FILES['excel_file']) || $_FILES['excel_file']['error'] !== UPLOAD_ERR_OK) {
-    $_SESSION['import_report'] = [
-        'inserted' => 0,
-        'ignored' => 0,
-        'details' => ["Aucun fichier sélectionné ou erreur d'upload"]
-    ];
-    header("Location: form-cas.php");
+    header("Location: form-cas.php?error=1");
     exit;
 }
 
 $inserted = 0;
 $ignored  = 0;
-$ignored_details = [];
 
-$spreadsheet = IOFactory::load($_FILES['excel_file']['tmp_name']);
-$rows = $spreadsheet->getActiveSheet()->toArray();
+try {
+    $spreadsheet = IOFactory::load($_FILES['excel_file']['tmp_name']);
+    $rows = $spreadsheet->getActiveSheet()->toArray();
 
-foreach ($rows as $i => $row) {
+    foreach ($rows as $i => $row) {
+        if ($i === 0) continue; 
 
-    if ($i === 0) continue; // ignorer l’en-tête
+        $type_cas   = trim($row[0] ?? ''); 
+        $nom_centre = trim($row[1] ?? ''); 
+        $immat_cell = strtoupper(str_replace(' ', '', trim($row[4] ?? ''))); 
 
-    // Colonnes B → F
-    $type_cas      = trim($row[1] ?? '');
-    $nom_centre    = trim($row[2] ?? '');
-    $date_cas_xl   = $row[4] ?? '';
-    $immat_cell    = trim($row[5] ?? '');
+        if (empty($type_cas) || empty($nom_centre)) continue;
 
-    // Vérification ligne vide ou en-tête
-    if (!$type_cas || !$nom_centre || !$date_cas_xl || !$immat_cell ||
-        strtolower($type_cas) === 'type de cas' ||
-        strtolower($nom_centre) === 'nom cct' ||
-        strtolower($immat_cell) === 'immatriculation'
-    ) {
-        $ignored++;
-        $ignored_details[] = "Ligne " . ($i+1) . " ignorée : ligne vide ou en-tête détectée";
-        continue;
-    }
+        $date_cas = cleanDate($row[2] ?? '');
+        $date_du_cas = cleanDate($row[3] ?? '');
 
-    // Date du cas
-    $date_du_cas = is_numeric($date_cas_xl)
-        ? Date::excelToDateTimeObject($date_cas_xl)->format('Y-m-d')
-        : date('Y-m-d', strtotime($date_cas_xl));
+        if (empty($date_cas)) $date_cas = $date_du_cas;
+        if (empty($date_du_cas)) $date_du_cas = date('Y-m-d'); 
 
-    // Date d'enregistrement fixée pour tous
-    $date_cas = '2023-12-01';
-
-    /* ==========================
-       CENTRE : récupération ou création
-    ========================== */
-    $stmt = $conn->prepare("SELECT id, region FROM centres WHERE nom_centre = ?");
-    $stmt->bind_param("s", $nom_centre);
-    $stmt->execute();
-    $centre = $stmt->get_result()->fetch_assoc();
-    $stmt->close();
-
-    if (!$centre) {
-        $region = 'NON DEFINIE';
-        $insertCentre = $conn->prepare("INSERT INTO centres (nom_centre, region) VALUES (?, ?)");
-        $insertCentre->bind_param("ss", $nom_centre, $region);
-        $insertCentre->execute();
-        $id_centre = $insertCentre->insert_id;
-        $insertCentre->close();
-    } else {
-        $id_centre = $centre['id'];
-        $region    = $centre['region'];
-    }
-
-    /* ==========================
-       IMMATRICULATIONS multiples
-    ========================== */
-    $immats = preg_split('/[,=]/', $immat_cell);
-
-    foreach ($immats as $immat) {
-        $immat = trim($immat);
-        if (!$immat) continue;
-
-        // Vérification doublon
-        $check = $conn->prepare("SELECT id FROM tables_cas WHERE immatriculation = ? AND date_du_cas = ?");
-        $check->bind_param("ss", $immat, $date_du_cas);
-        $check->execute();
-        $check->store_result();
-
-        if ($check->num_rows > 0) {
-            $ignored++;
-            $ignored_details[] = "Ligne " . ($i+1) . " ignorée : doublon pour immatriculation '$immat' et date '$date_du_cas'";
-            $check->close();
-            continue;
+        // Gestion Type de Cas
+        $stmt_type = $conn->prepare("SELECT id FROM types_cas WHERE TRIM(type_name) = TRIM(?)");
+        $stmt_type->bind_param("s", $type_cas);
+        $stmt_type->execute();
+        if ($stmt_type->get_result()->num_rows === 0) {
+            $ins_type = $conn->prepare("INSERT INTO types_cas (type_name) VALUES (?)");
+            $ins_type->bind_param("s", $type_cas);
+            $ins_type->execute();
         }
-        $check->close();
+        $stmt_type->close();
 
-        // Insertion
-        $insert = $conn->prepare("
-            INSERT INTO tables_cas (types_cas, region, date_du_cas, immatriculation, id_centre, date_cas)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ");
-        $insert->bind_param("ssssss", $type_cas, $region, $date_du_cas, $immat, $id_centre, $date_cas);
-
-        if ($insert->execute()) {
-            $inserted++;
+        // Gestion Centre
+        $stmt = $conn->prepare("SELECT id, region FROM centres WHERE TRIM(nom_centre) = TRIM(?)");
+        $stmt->bind_param("s", $nom_centre);
+        $stmt->execute();
+        $centre = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        
+        if (!$centre) {
+            $reg_defaut = "NON DEFINIE";
+            $insC = $conn->prepare("INSERT INTO centres (nom_centre, region) VALUES (?, ?)");
+            $insC->bind_param("ss", $nom_centre, $reg_defaut);
+            $insC->execute();
+            $id_centre = $insC->insert_id;
+            $region = $reg_defaut;
         } else {
-            $ignored++;
-            $ignored_details[] = "Ligne " . ($i+1) . " non insérée : erreur SQL pour immatriculation '$immat'";
+            $id_centre = $centre['id'];
+            $region = $centre['region'];
         }
 
-        $insert->close();
+        // --- LOGIQUE DE REGROUPEMENT ---
+        $immats_array = array_unique(explode(',', $immat_cell));
+
+        foreach ($immats_array as $immat) {
+            $immat = trim($immat);
+            if (empty($immat)) continue;
+
+            $chk = $conn->prepare("SELECT id, immatriculation FROM tables_cas WHERE TRIM(date_du_cas) = TRIM(?) AND id_centre = ? AND TRIM(types_cas) = TRIM(?)");
+            $chk->bind_param("sis", $date_du_cas, $id_centre, $type_cas);
+            $chk->execute();
+            $res = $chk->get_result();
+
+            if ($res->num_rows > 0) {
+                $row_exist = $res->fetch_assoc();
+                $current_immats = explode(',', $row_exist['immatriculation']);
+
+                if (!in_array($immat, $current_immats)) {
+                    $new_list = $row_exist['immatriculation'] . ',' . $immat;
+                    $upd = $conn->prepare("UPDATE tables_cas SET immatriculation = ? WHERE id = ?");
+                    $upd->bind_param("si", $new_list, $row_exist['id']);
+                    $upd->execute();
+                    $inserted++;
+                } else {
+                    $ignored++;
+                }
+            } else {
+                $ins = $conn->prepare("INSERT INTO tables_cas (types_cas, region, date_cas, date_du_cas, immatriculation, id_centre) VALUES (?, ?, ?, ?, ?, ?)");
+                $ins->bind_param("sssssi", $type_cas, $region, $date_cas, $date_du_cas, $immat, $id_centre);
+                if ($ins->execute()) $inserted++;
+            }
+            $chk->close();
+        }
     }
-}
-
-// Stockage du rapport pour affichage
-$_SESSION['import_report'] = [
-    'inserted' => $inserted,
-    'ignored' => $ignored,
-    'details' => $ignored_details
-];
-
-header("Location: form-cas.php");
-exit;
-?>
-=======
-<?php
-require_once 'config.php';
-require_once __DIR__ . '/vendor/autoload.php';
-
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
-
-session_start(); // nécessaire pour envoyer le rapport d'import
-
-if (!isset($_FILES['excel_file']) || $_FILES['excel_file']['error'] !== UPLOAD_ERR_OK) {
-    $_SESSION['import_report'] = [
-        'inserted' => 0,
-        'ignored' => 0,
-        'details' => ["Aucun fichier sélectionné ou erreur d'upload"]
-    ];
-    header("Location: form-cas.php");
+    header("Location: form-cas.php?inserted=$inserted&ignored=$ignored");
+    exit;
+} catch (Exception $e) {
+    header("Location: form-cas.php?error=" . urlencode($e->getMessage()));
     exit;
 }
-
-$inserted = 0;
-$ignored  = 0;
-$ignored_details = [];
-
-$spreadsheet = IOFactory::load($_FILES['excel_file']['tmp_name']);
-$rows = $spreadsheet->getActiveSheet()->toArray();
-
-foreach ($rows as $i => $row) {
-
-    if ($i === 0) continue; // ignorer l’en-tête
-
-    // Colonnes B → F
-    $type_cas      = trim($row[1] ?? '');
-    $nom_centre    = trim($row[2] ?? '');
-    $date_cas_xl   = $row[4] ?? '';
-    $immat_cell    = trim($row[5] ?? '');
-
-    // Vérification ligne vide ou en-tête
-    if (!$type_cas || !$nom_centre || !$date_cas_xl || !$immat_cell ||
-        strtolower($type_cas) === 'type de cas' ||
-        strtolower($nom_centre) === 'nom cct' ||
-        strtolower($immat_cell) === 'immatriculation'
-    ) {
-        $ignored++;
-        $ignored_details[] = "Ligne " . ($i+1) . " ignorée : ligne vide ou en-tête détectée";
-        continue;
-    }
-
-    // Date du cas
-    $date_du_cas = is_numeric($date_cas_xl)
-        ? Date::excelToDateTimeObject($date_cas_xl)->format('Y-m-d')
-        : date('Y-m-d', strtotime($date_cas_xl));
-
-    // Date d'enregistrement fixée pour tous
-    $date_cas = '2023-12-01';
-
-    /* ==========================
-       CENTRE : récupération ou création
-    ========================== */
-    $stmt = $conn->prepare("SELECT id, region FROM centres WHERE nom_centre = ?");
-    $stmt->bind_param("s", $nom_centre);
-    $stmt->execute();
-    $centre = $stmt->get_result()->fetch_assoc();
-    $stmt->close();
-
-    if (!$centre) {
-        $region = 'NON DEFINIE';
-        $insertCentre = $conn->prepare("INSERT INTO centres (nom_centre, region) VALUES (?, ?)");
-        $insertCentre->bind_param("ss", $nom_centre, $region);
-        $insertCentre->execute();
-        $id_centre = $insertCentre->insert_id;
-        $insertCentre->close();
-    } else {
-        $id_centre = $centre['id'];
-        $region    = $centre['region'];
-    }
-
-    /* ==========================
-       IMMATRICULATIONS multiples
-    ========================== */
-    $immats = preg_split('/[,=]/', $immat_cell);
-
-    foreach ($immats as $immat) {
-        $immat = trim($immat);
-        if (!$immat) continue;
-
-        // Vérification doublon
-        $check = $conn->prepare("SELECT id FROM tables_cas WHERE immatriculation = ? AND date_du_cas = ?");
-        $check->bind_param("ss", $immat, $date_du_cas);
-        $check->execute();
-        $check->store_result();
-
-        if ($check->num_rows > 0) {
-            $ignored++;
-            $ignored_details[] = "Ligne " . ($i+1) . " ignorée : doublon pour immatriculation '$immat' et date '$date_du_cas'";
-            $check->close();
-            continue;
-        }
-        $check->close();
-
-        // Insertion
-        $insert = $conn->prepare("
-            INSERT INTO tables_cas (types_cas, region, date_du_cas, immatriculation, id_centre, date_cas)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ");
-        $insert->bind_param("ssssss", $type_cas, $region, $date_du_cas, $immat, $id_centre, $date_cas);
-
-        if ($insert->execute()) {
-            $inserted++;
-        } else {
-            $ignored++;
-            $ignored_details[] = "Ligne " . ($i+1) . " non insérée : erreur SQL pour immatriculation '$immat'";
-        }
-
-        $insert->close();
-    }
-}
-
-// Stockage du rapport pour affichage
-$_SESSION['import_report'] = [
-    'inserted' => $inserted,
-    'ignored' => $ignored,
-    'details' => $ignored_details
-];
-
-header("Location: form-cas.php");
-exit;
-?>
->>>>>>> cae26eb8cd1aa78f464dbed20270946d17518866

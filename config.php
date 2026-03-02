@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $password = ""; // vide par défaut sur XAMPP
-$dbname = "gestion-cas"; // nom de ta base
+$dbname = "proof1343861_9l33vg"; // nom de ta base
 
 $conn = new mysqli($host, $user, $password, $dbname);
 

@@ -7,34 +7,28 @@
     padding: 0;
 }
 
+/* Base */
 html, body {
     font-family: 'Roboto', Arial, sans-serif;
-    background: url('image/philipp-hubert-dVVjhUcdb30-unsplash.jpg') no-repeat center center fixed;
+    background: url('image/philipp-hubert-dVVjhUcdb30-unsplash.jpg') no-repeat center center;
     background-size: cover;
-    min-height: 100vh;
+    min-height: 100%;
     color: #333;
 }
 
-/* Overlay semi-transparent derrière le dashboard pour lisibilité */
-.dashboard-bg {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 40px 30px;
-    background: rgba(255, 255, 255, 0.15); /* très transparent pour voir le bg */
-    backdrop-filter: blur(12px); /* flou derrière pour lisibilité */
-    border-radius: 16px;
-    text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+body {
+    overflow-x: hidden;
 }
 
-/* Logo header */
+/* Header */
 header {
     text-align: center;
     padding: 20px;
 }
 
 header .logo {
-    height: 70px;
+    max-width: 90%;
+    height: auto;
     transition: transform 0.3s;
 }
 
@@ -42,70 +36,25 @@ header .logo:hover {
     transform: scale(1.05);
 }
 
-/* Dashboard title */
+/* Dashboard */
+.dashboard-bg {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 40px 30px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Titre */
 .dashboard-title {
     font-size: 36px;
     font-weight: 500;
     margin-bottom: 40px;
     color: #fff;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.4); /* lisibilité sur le bg */
-}
-
-/* Container des types */
-.buttons-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    justify-items: center;
-}
-
-/* Carte type de cas */
-.type-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    padding: 25px 20px;
-    background: rgba(66, 133, 244, 0.85); /* bleu semi-transparent pour voir bg */
-    color: #fff;
-    font-weight: 500;
-    border-radius: 12px;
-    min-width: 220px;
-    width: 100%;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
-}
-
-.type-button:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0,0,0,0.2);
-    background: rgba(66, 133, 244, 1); /* devient opaque au hover */
-}
-
-/* Select */
-.type-button select {
-    width: 100%;
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-}
-
-/* Bouton submit */
-.type-button button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    background-color: #fff;
-    color: #4285f4;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.3s, color 0.3s;
-}
-
-.type-button button:hover {
-    background-color: #4285f4;
-    color: #fff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
 
 /* Bouton principal */
@@ -127,16 +76,88 @@ header .logo:hover {
     box-shadow: 0 8px 18px rgba(0,0,0,0.2);
 }
 
-/* Responsive */
+/* Container des cartes */
+.buttons-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* Carte */
+.type-button {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    background: rgba(66, 133, 244, 0.85);
+    color: #fff;
+    font-weight: 500;
+    border-radius: 12px;
+    width: 100%;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+}
+
+.type-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+    background: rgba(66, 133, 244, 1);
+}
+
+/* Select */
+.type-button select {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Bouton carte */
+.type-button button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #4285f4;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+.type-button button:hover {
+    background-color: #4285f4;
+    color: #fff;
+}
+
+/* ========================= */
+/* 📱 Responsive Mobile */
+/* ========================= */
 @media (max-width: 640px) {
     .dashboard-bg {
-        padding: 30px 20px;
+        margin: 20px 10px;
+        padding: 25px 15px;
+        border-radius: 12px;
+        width: auto;
     }
+
     .dashboard-title {
-        font-size: 28px;
+        font-size: 24px;
+        margin-bottom: 25px;
     }
+
     .buttons-container {
         grid-template-columns: 1fr;
         gap: 15px;
     }
+
+    .btn-custom {
+        width: 100%;
+        text-align: center;
+    }
 }
+
+/* ========================= */
+/* 📱 Tablette */
+/* ========================= */
+@media (min-width: 641px)
