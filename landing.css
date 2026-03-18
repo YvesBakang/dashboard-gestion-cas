@@ -146,4 +146,35 @@ html, body {
         font-size: 1.25rem;
     }
 }
+/* =========================
+   6. CHAMP MOT DE PASSE
+========================= */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
 
+.password-wrapper input {
+    width: 100%;
+    padding-right: 45px; /* espace pour l'icône */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    color: #888;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: #0A3D62;
+}
+
+.toggle-password svg {
+    width: 20px;
+    height: 20px;
+}

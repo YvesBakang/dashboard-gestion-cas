@@ -1,5 +1,6 @@
 <?php
 require_once 'config.php';
+require_once 'navbar.php';
 
 $type  = isset($_GET['type']) ? trim($_GET['type']) : '';
 $annee = isset($_GET['annee']) ? (int)$_GET['annee'] : 0;
@@ -34,17 +35,10 @@ function h($s) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    <?php require_once 'navbar.php'; ?>
 
-<header>
-    <img src="image/logo1Catis.jpg" class="logo" alt="Logo">
-    <h1>Type de cas : <?php echo h($type); ?> (<?php echo $annee; ?>)</h1>
-    <a href="types_cas.php" class="btn-custom btn-green">Retour</a>
-</header>
-
-<div class="details-table-container">
-
-   <div class="search-wrapper">
-    <input type="text" id="searchCentre" placeholder="🔍 Filtrer un centre par son nom">
+<div class="page-header">
+    <h2>Type de cas : <?php echo h($type); ?> (<?php echo $annee; ?>)</h2>
 </div>
 
 

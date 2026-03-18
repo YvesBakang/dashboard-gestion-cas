@@ -1,6 +1,7 @@
 <?php
-session_start();
 require_once 'config.php';
+
+$username = $_SESSION['username'] ?? 'utilisateur';
 
 // Types de cas depuis la table types_cas
 $types_query = $conn->query("SELECT id, type_name FROM types_cas ORDER BY type_name ASC");
@@ -36,10 +37,7 @@ unset($_SESSION['old']);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-
-<div class="container mt-3">
-    <a href="types_cas.php" class="btn btn-outline-light btn-lg shadow-sm">← Retour à l'accueil</a>
-</div>
+<?php include 'navbar.php'; ?>
 
 <div class="form-container">
     <img src="image/logo1Catis.jpg" class="logo">

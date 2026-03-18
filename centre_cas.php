@@ -1,5 +1,6 @@
 <?php
 require_once 'config.php';
+require_once 'navbar.php'; 
 
 $type   = $_GET['type'] ?? '';
 $centre = isset($_GET['centre']) ? (int)$_GET['centre'] : 0;
@@ -47,18 +48,12 @@ function h($s) {
     <link rel="stylesheet" href="details_cas.css">
 </head>
 <body>
+    <?php require_once 'navbar.php'; ?>
 
-<header>
-    <img src="image/logo1Catis.jpg" class="logo" alt="Logo">
-    <h2 style="color: white; font-size: 1.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px;">
-        <?php echo h($type); ?> (<?php echo $annee; ?>)
-    </h2>
-    <h1 style="margin-top: 0;"><?php echo h($nomCentre); ?></h1>
-    <a href="details_cas.php?type=<?php echo urlencode($type); ?>&annee=<?php echo $annee; ?>" class="btn-custom btn-green">
-        Retour aux centres
-    </a>
-</header>
-
+<div class="page-header">
+    <h2><?php echo h($type); ?> (<?php echo $annee; ?>)</h2>
+    <h3><?php echo h($nomCentre); ?></h3>
+</div>
 <div class="details-table-container">
     <div class="table-wrapper">
         <table>

@@ -1,5 +1,6 @@
 <?php 
-include "config.php";
+require_once "config.php";
+require_once 'navbar.php';
 
 function h($str) {
     return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
@@ -128,11 +129,7 @@ if ($selected_year !== null) {
     </style>
 </head>
 <body>
-
-<header>
-    <img src="image/logo1Catis.jpg" alt="Logo Prooftag CATIS" class="logo" style="max-height: 60px;">
-</header>
-
+   <?php require_once 'navbar.php'; ?> 
 <div class="dashboard-bg">
     
     <?php if ($selected_year === null): ?>
