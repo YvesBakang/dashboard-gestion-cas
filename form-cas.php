@@ -21,8 +21,15 @@ $inserted = $_GET['inserted'] ?? null;
 $ignored  = $_GET['ignored'] ?? null;
 $success  = isset($_GET['success']);
 $error    = $_GET['error'] ?? null;
+$wa_sent  = isset($_GET['wa_sent']);
+$wa_error = isset($_GET['wa_error']);
+$wa_error_msg = $_GET['wa_error_msg'] ?? '';
 
 $old = $_SESSION['old'] ?? [];
+$old_whatsapp_recipients = $old['whatsapp_recipients'] ?? [];
+if (!is_array($old_whatsapp_recipients)) {
+    $old_whatsapp_recipients = [];
+}
 unset($_SESSION['old']);
 ?>
 <!DOCTYPE html>
@@ -58,6 +65,12 @@ unset($_SESSION['old']);
         </div>
     <?php endif; ?>
 
+    <?php if ($wa_sent): ?>
+        <div class="alert alert-success alert-modern animate-in">
+            ✅ Notification WhatsApp envoyée.
+        </div>
+    <?php endif; ?>
+
     <?php if ($error): ?>
         <div class="alert alert-danger alert-modern animate-in">
             ❌ <?php 
@@ -66,6 +79,15 @@ unset($_SESSION['old']);
                 else if($error == 'missing') echo "Veuillez remplir tous les champs obligatoires.";
                 else echo "Erreur lors de l'enregistrement.";
             ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($wa_error): ?>
+        <div class="alert alert-warning alert-modern animate-in">
+            ⚠️ Cas enregistré, mais WhatsApp non envoyé.
+            <?php if (!empty($wa_error_msg)): ?>
+                <br><small><?= htmlspecialchars($wa_error_msg, ENT_QUOTES, 'UTF-8') ?></small>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 
@@ -142,6 +164,51 @@ unset($_SESSION['old']);
         <label class="text-white mt-3">Documents PDF (plusieurs possibles)</label>
         <input type="file" name="pdf[]" class="form-control" accept=".pdf" multiple>
         <small class="text-info d-block mt-1">Maintenez Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs fichiers PDF.</small>
+
+        <hr class="text-white my-4">
+
+        <label class="text-white mt-2">Notification WhatsApp (optionnel)</label>
+        <div class="form-check form-switch mt-2 mb-2">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                name="send_whatsapp"
+                id="sendWhatsApp"
+                value="1"
+                <?= !empty($old['send_whatsapp']) ? 'checked' : '' ?>
+            >
+            <label class="form-check-label text-white" for="sendWhatsApp">
+                Envoyer le message “NOUVEAU CAS ENREGISTRE”
+            </label>
+        </div>
+
+        <div id="whatsappRecipients">
+            <label class="text-white mt-3">Numéros prédéfinis</label>
+            <?php if (!empty($WHATSAPP_PREDEFINED_RECIPIENTS)): ?>
+                <div class="mt-2">
+                    <?php foreach ($WHATSAPP_PREDEFINED_RECIPIENTS as $recipient): ?>
+                        <?php $recipientEsc = htmlspecialchars($recipient, ENT_QUOTES, 'UTF-8'); ?>
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="whatsapp_recipients[]"
+                                value="<?= $recipientEsc ?>"
+                                <?= in_array($recipient, $old_whatsapp_recipients, true) ? 'checked' : '' ?>
+                                id="wa_<?= md5($recipientEsc) ?>"
+                            >
+                            <label class="form-check-label text-white" for="wa_<?= md5($recipientEsc) ?>">
+                                <?= $recipientEsc ?>
+                            </label>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <div class="alert alert-warning" role="alert" style="background: rgba(255,255,255,0.85);">
+                    Aucun numéro WhatsApp prédéfini n'est configuré. Modifie `config.php` pour ajouter des numéros.
+                </div>
+            <?php endif; ?>
+        </div>
 
         <button class="btn btn-primary w-100 mt-4 shadow"> Enregistrer le cas</button>
     </form>
